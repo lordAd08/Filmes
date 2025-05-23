@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clube dos Filmes 🎬</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #222;
+      padding: 20px;
+      text-align: center;
+      color: orange;
+      font-size: 24px;
+    }
+    main {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    .film-list {
+      background-color: #333;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    .film-item {
+      padding: 5px 0;
+      border-bottom: 1px solid #444;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .film-item:last-child {
+      border-bottom: none;
+    }
+    button {
+      background-color: orange;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .remove-btn {
+      background-color: red;
+      color: white;
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #0f0;
+    }
+    input, select {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 10px;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    🎥 Clube dos Filmes - Cinema em Casa 🍿
+  </header>
+  <main>
+    <div>
+      <input type="text" id="novoFilme" placeholder="Nome do filme">
+      <select id="categoria">
+        <option value="Terror">🧟‍♂️ Terror</option>
+        <option value="Comédia">🤣 Comédia</option>
+        <option value="Ficção Científica">🚀 Ficção Científica</option>
+        <option value="Animação">🦁 Animação</option>
+        <option value="Ação">💥 Ação</option>
+        <option value="Drama">🎭 Drama</option>
+      </select>
+      <button onclick="adicionarFilme()">➕ Adicionar Filme</button>
+    </div>
+
+    <div class="film-list" id="filmList">
+      <!-- Lista renderizada pelo JavaScript -->
+    </div>
+
+    <button onclick="sortearFilme()">🎲 Sortear Filme</button>
+    <div class="result" id="resultado"></div>
+  </main>
+
+  <script>
+    let filmes = [
+      "🧟‍♂️ Extermínio (Terror)",
+      "🤣 As Branquelas (Comédia)",
+      "🚀 Interestelar (Ficção Científica)",
+      "🦁 O Rei Leão (Animação)"
+    ];
+
+    function atualizarLista() {
+      const lista = document.getElementById('filmList');
+      lista.innerHTML = '';
+      filmes.forEach((filme, index) => {
+        const div = document.createElement('div');
+        div.className = 'film-item';
+
+        const span = document.createElement('span');
+        span.textContent = filme;
+
+        const btn = document.createElement('button');
+        btn.textContent = '🗑️';
+        btn.className = 'remove-btn';
+        btn.onclick = () => {
+          filmes.splice(index, 1);
+          atualizarLista();
+        };
+
+        div.appendChild(span);
+        div.appendChild(btn);
+        lista.appendChild(div);
+      });
+    }
+
+    function adicionarFilme() {
+      const nome = document.getElementById('novoFilme').value.trim();
+      const categoria = document.getElementById('categoria').value;
+      if (nome !== '') {
+        let emoji = '';
+        switch (categoria) {
+          case 'Terror': emoji = '🧟‍♂️'; break;
+          case 'Comédia': emoji = '🤣'; break;
+          case 'Ficção Científica': emoji = '🚀'; break;
+          case 'Animação': emoji = '🦁'; break;
+          case 'Ação': emoji = '💥'; break;
+          case 'Drama': emoji = '🎭'; break;
+        }
+        const novoFilme = `${emoji} ${nome} (${categoria})`;
+        filmes.push(novoFilme);
+        atualizarLista();
+        document.getElementById('novoFilme').value = '';
+      }
+    }
+
+    function sortearFilme() {
+      if (filmes.length === 0) {
+        document.getElementById('resultado').innerText = 'Nenhum filme na lista.';
+        return;
+      }
+      const sorteado = filmes[Math.floor(Math.random() * filmes.length)];
+      document.getElementById('resultado').innerText = `Filme sorteado: ${sorteado}`;
+    }
+
+    // Atualiza a lista ao carregar
+    atualizarLista();
+  </script>
+</body>
+</html>
